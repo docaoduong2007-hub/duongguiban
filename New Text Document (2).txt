@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khảo sát quan trọng</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Nền hình bồn cầu và giấy vệ sinh */
+            background-color: #f0f0f0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='0' y='30' font-size='30'%3E🚽%3C/text%3E%3Ctext x='30' y='55' font-size='20'%3E🧻%3C/text%3E%3C/svg%3E");
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            border: 5px solid #8B4513;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #5D4037;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .shit-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 60px;
+            align-items: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #yesBtn {
+            background-color: #8B4513;
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #ff4757;
+            color: white;
+            position: absolute;
+        }
+
+        /* Hiệu ứng sít bay lơ lửng xung quanh */
+        .floating-shit {
+            position: absolute;
+            font-size: 30px;
+            z-index: 1;
+            opacity: 0.5;
+            animation: move linear infinite;
+        }
+
+        @keyframes move {
+            from { transform: translateY(100vh) rotate(0deg); }
+            to { transform: translateY(-10vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        for (let i = 0; i < 15; i++) {
+            let shit = document.createElement('div');
+            shit.className = 'floating-shit';
+            shit.innerText = '💩';
+            shit.style.left = Math.random() * 100 + 'vw';
+            shit.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            shit.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(shit);
+        }
+    </script>
+
+    <div class="container">
+        <span class="shit-icon">💩</span>
+        <h1>Bạn đã ăn cứt bao giờ chưa?</h1>
+        
+        <div class="btn-group">
+            <button id="yesBtn" onclick="alert('Biết ngay mà! Đồ tồi kkk 💩')">Rồi</button>
+            <button id="noBtn" onmouseover="moveButton()">Chưa</button>
+        </div>
+    </div>
+
+    <script>
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            // Tính toán vị trí ngẫu nhiên nhưng không bị văng ra khỏi màn hình
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        // Khởi tạo vị trí ban đầu cho nút "Chưa" để nó nằm cạnh nút "Rồi"
+        window.onload = () => {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const rect = yesBtn.getBoundingClientRect();
+            noBtn.style.left = (rect.right + 20) + 'px';
+            noBtn.style.top = rect.top + 'px';
+        }
+    </script>
+
+</body>
+</html>
