@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Bắt Ruồi</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            cursor: crosshair; /* Đổi con trỏ chuột thành hình dấu cộng */
+        }
+
+        .fly-container {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+
+        .fly {
+            font-size: 40px;
+            user-select: none;
+        }
+
+        .speech-bubble {
+            background: white;
+            border: 2px solid black;
+            border-radius: 10px;
+            padding: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            color: red;
+            display: none; /* Ẩn khi chưa bị bắt */
+            margin-bottom: 5px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center;">Di chuột chạm vào lũ ruồi!</h2>
+
+    <script>
+        const flyCount = 5;
+        const flies = [];
+
+        function createFly() {
+            const container = document.createElement('div');
+            container.className = 'fly-container';
+            
+            // Tạo bong bóng thoại
+            const bubble = document.createElement('div');
+            bubble.className = 'speech-bubble';
+            bubble.innerText = 'memaybeo';
+            
+            // Tạo hình con ruồi
+            const flyIcon = document.createElement('div');
+            flyIcon.className = 'fly';
+            flyIcon.innerText = '🪰';
+
+            container.appendChild(bubble);
+            container.appendChild(flyIcon);
+            document.body.appendChild(container);
+
+            const flyObj = {
+                element: container,
+                bubble: bubble,
+                x: Math.random() * (window.innerWidth - 80),
+                y: Math.random() * (window.innerHeight - 80),
+                dx: (Math.random() - 0.5) * 6,
+                dy: (Math.random() - 0.5) * 6,
+                isCaught: false
+            };
+
+            // Sự kiện khi di chuột trúng ruồi
+            container.addEventListener('mouseenter', () => {
+                if (!flyObj.isCaught) {
+                    catchFly(flyObj);
+                }
+            });
+
+            return flyObj;
+        }
+
+        function catchFly(fly) {
+            fly.isCaught = true;
+            fly.bubble.style.display = 'block'; // Hiện chữ
+            
+            // Sau 0.5 giây thì biến mất hẳn
+            setTimeout(() => {
+                fly.element.style.opacity = '0';
+                fly.element.style.pointerEvents = 'none'; // Không cho tương tác khi đang ẩn
+            }, 500);
+
+            // Sau 5 giây hiện lại ở vị trí ngẫu nhiên mới
+            setTimeout(() => {
+                fly.x = Math.random() * (window.innerWidth - 80);
+                fly.y = Math.random() * (window.innerHeight - 80);
+                fly.isCaught = false;
+                fly.bubble.style.display = 'none';
+                fly.element.style.opacity = '1';
+                fly.element.style.pointerEvents = 'auto';
+            }, 5500); // 5s ẩn + 0.5s chờ ban đầu
+        }
+
+        function moveFlies() {
+            flies.forEach(fly => {
+                if (!fly.isCaught) {
+                    // Cập nhật vị trí
+                    fly.x += fly.dx;
+                    fly.y += fly.dy;
+
+                    // Va chạm tường
+                    if (fly.x <= 0 || fly.x >= window.innerWidth - 60) fly.dx *= -1;
+                    if (fly.y <= 0 || fly.y >= window.innerHeight - 60) fly.dy *= -1;
+
+                    fly.element.style.left = fly.x + 'px';
+                    fly.element.style.top = fly.y + 'px';
+                }
+            });
+            requestAnimationFrame(moveFlies);
+        }
+
+        // Khởi tạo 5 con ruồi
+        for (let i = 0; i < flyCount; i++) {
+            flies.push(createFly());
+        }
+
+        moveFlies();
+    </script>
+</body>
+</html>
